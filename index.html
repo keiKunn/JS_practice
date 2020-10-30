@@ -6,7 +6,7 @@
   <title>JavaScript課題①-1</title>
 </head>
 <body>
-  JavaScript課題①-1
+  JavaScript課題②-1
   <script>
     'use strict';
     /*
@@ -27,7 +27,22 @@
       }
     }
 
-    
+    /*
+    JavaScript課題①-2
+    日本の首都は？
+      "東京"に一致→正解です！ break
+      不一致→不正解です！     
+    */
+    const japanCapital = "東京"    
+    while (true) {
+      var inputCapitalName = prompt("日本の首都は？")
+      if(inputCapitalName === japanCapital){
+        alert("正解です！");
+        break;
+      }else{
+        alert("不正解です！");
+      }
+    }    
   </script>
 </body>
 </html>
