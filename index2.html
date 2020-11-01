@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript課題①-2</title>
+</head>
+<body>
+  JavaScript課題①-2
+  <script>
+    'use strict';
+    
+    /*
+    JavaScript課題①-2
+    日本の首都は？
+      "東京"に一致→正解です！ break
+      不一致→不正解です！     
+    */
+    const japanCapital = "東京"    
+    while (true) {
+      var inputCapitalName = prompt("日本の首都は？")
+      if(inputCapitalName === japanCapital){
+        alert("正解です！");
+        break;
+      }else{
+        alert("不正解です！");
+      }
+    }    
+  </script>
+</body>
+</html>
