@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript課題①-1</title>
+</head>
+<body>
+  JavaScript課題①-1
+  <script>
+    'use strict';
+    /*
+    JavaScript課題①-1
+     15で割り切れる数→FizzBuzz [i]
+     3で割り切れる数→Fizz [i]
+     5で割り切れる数→Buzz [i]
+
+     ※出力結果キャプチャにて、インデックス99までのループと判断しました
+    */
+    for (let i = 1; i < 100; i++) {
+      if (i % 15 == 0) {
+        console.log("FizzBuzz　" + i);
+      }else if(i % 3 == 0){
+        console.log("Fizz　" + i);
+      }else if(i % 5 == 0){
+        console.log("Buzz　" + i);
+      }
+    }
+
+    
+  </script>
+</body>
+</html>
