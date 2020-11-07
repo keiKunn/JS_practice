@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript課題①-3</title>
+</head>
+<body>
+  JavaScript課題①-3
+  <script>
+    'use strict';
+    
+    /*
+    JavaScript課題①-3  
+    */
+    // タスク一覧レイアウトオブジェクト
+    const taskLayout = {
+      titleLine : "====================",
+      title     : "現在持っているタスク一覧"
+    }
+    // タスク一覧格納配列
+    const allTask = ['掃除','買い物','散歩'];
+
+    // コンソールログに初期状態のタスク一覧を表示
+    displayTask(taskLayout,allTask);
+
+    // タスク追加ダイアログ
+    const inputTask = prompt("タスクを入力してください");
+    if (inputTask !== null){
+      // [タスク一覧]に追加する
+      allTask.push(inputTask);
+      
+      // 確認ダイアログ表示
+      confirm("新しいタスクを追加しました。");
+
+      // コンソールに出力
+      displayTask(taskLayout,allTask);
+
+      // 新たな入力ダイアログを表示
+      const cotroleTask = prompt("「確認、追加、削除、終了」の４つのいずれかを入力して下さい");
+    }
+
+    /**
+    *コンソールログにタスク一覧を表示する
+    * taskLayoutObj タスク一覧レイアウトオブジェクト
+    * taskList タスク一覧格納配列
+    */
+    function displayTask(taskLayoutObj,taskList){
+      console.log(taskLayoutObj.titleLine);
+      console.log(taskLayoutObj.title);
+      console.log(taskLayoutObj.titleLine);
+      taskList.forEach(function(value,index){
+        console.log(index +' : ' +value);
+      });
+    }
+  </script>
+</body>
+</html>
