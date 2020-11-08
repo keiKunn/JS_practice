@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript課題①-4</title>
+</head>
+<body>
+  JavaScript課題①-4
+  <script>
+    'use strict';
+    
+    /*
+    JavaScript課題①-4
+    */
+    // タスク一覧レイアウトオブジェクト
+    const taskLayout = {
+      titleLine : "====================",
+      title     : "現在持っているタスク一覧"
+    }
+
+    // タスクとジャンル格納オブジェクト[配列]
+    const listTaskAndGenre = [
+      {task : "机を片づける", genre : "掃除"},
+      {task : "牛乳を買う", genre : "買い物"},
+      {task : "散歩する", genre : "運動"}
+    ];
+
+    // 初期表示 タスクとジャンル一覧
+    displayTaskAndGenre(taskLayout, listTaskAndGenre);
+
+    // 入力
+    const inputTask = prompt("タスクを入力してください");
+    const inputGenre = prompt("ジャンルを入力してください");
+
+    if (inputTask !== null && inputGenre !== null){
+
+      // 追加されたタスクとジャンルをオブジェクトに設定
+      const inputTaskAndGenre = {
+        task : inputTask,
+        genre : inputGenre
+      };
+      
+      // タスクとジャンル格納オブジェクト[配列] に追加
+      listTaskAndGenre.push(inputTaskAndGenre);
+      
+      // 確認ダイアログ表示
+      confirm("新しいタスクを追加しました。");
+
+      // コンソールに出力
+      displayTaskAndGenre(taskLayout, listTaskAndGenre)
+
+      // 新たな入力ダイアログを表示
+      const cotroleTask = prompt("「確認、追加、削除、終了」の４つのいずれかを入力して下さい");
+    }
+
+    /**
+    *コンソールログにタスク一覧を表示する
+    * taskLayoutObj タスク一覧レイアウトオブジェクト
+    * arrayTaskAndGenre タスクとジャンル格納オブジェクトの配列
+    */
+    function displayTaskAndGenre(taskLayoutObj, arrayTaskAndGenre){
+      console.log(taskLayoutObj.titleLine);
+      console.log(taskLayoutObj.title);
+      console.log(taskLayoutObj.titleLine);
+
+      const list = arrayTaskAndGenre.map(function (obj,index){
+        //console.log(index + ' : [内容]'+ obj.task +',[ジャンル]'+ obj.genre);
+        //練習- テンプレートリテラルを使用
+        console.log(`${index} : [内容] ${obj.task} ,[ジャンル] ${obj.genre}`);
+      });
+    }
+  </script>
+</body>
+</html>
