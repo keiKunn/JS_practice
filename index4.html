@@ -20,16 +20,11 @@
     }
 
     // タスクとジャンル格納オブジェクト[配列]
-    const listTaskAndGenre = [{
-      task : "机を片づける",
-      genre : "掃除"
-    },{
-      task : "牛乳を買う",
-      genre : "買い物"
-    },{
-      task : "散歩する",
-      genre : "運動"
-    }];
+    const listTaskAndGenre = [
+      {task : "机を片づける", genre : "掃除"},
+      {task : "牛乳を買う", genre : "買い物"},
+      {task : "散歩する", genre : "運動"}
+    ];
 
     // 初期表示 タスクとジャンル一覧
     displayTaskAndGenre(taskLayout, listTaskAndGenre);
@@ -70,7 +65,9 @@
       console.log(taskLayoutObj.titleLine);
 
       const list = arrayTaskAndGenre.map(function (obj,index){
-        console.log(index + ' : [内容]'+ obj.task +',[ジャンル]'+ obj.genre);
+        //console.log(index + ' : [内容]'+ obj.task +',[ジャンル]'+ obj.genre);
+        //練習- テンプレートリテラルを使用
+        console.log(`${index} : [内容] ${obj.task} ,[ジャンル] ${obj.genre}`);
       });
     }
   </script>
