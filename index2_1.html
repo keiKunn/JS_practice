@@ -1,63 +1,63 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang='ja'>
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset='UTF-8'>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
   <title>JavaScript課題②-1</title>
+</head>
+
+<body>
+  <p>Javascript課題②-1</p>
+  <div>
+    Fizz num : <input type='text' id='fizzNum' placeholder='整数値を入力してください'>
+    <br>
+    Buzz num : <input type='text' id='buzzNum' placeholder='整数値を入力してください'>
+  </div>
+
+  <input type='button' id='exec_button' value='実行'>
+  <div id='output'>
+    【出力】
+  </div>
 
   <script>
     'use strict';
-    window.onload = function () {
-
-      /*
-      JavaScript課題②-1
-      */
-      document.getElementById("exec_button").onclick = function (event) {
+      document.getElementById('exec_button').addEventListener('click', function(event) {
         // 実行ボタン押下後の処理
         // エラーメッセージ出力先のdiv要素が存在している場合はクリア
-        const el = document.getElementById("result");
-        if (el != null) {
+        const el = document.getElementById('result');
+        if (el) {
           el.remove();
         }
 
         // 入力値の取得
-        let fizzNum = document.getElementById("FizzNum").value;
-        let buzzNum = document.getElementById("BuzzNum").value;
+        const fizzStr = document.getElementById('fizzNum').value;
+        const buzzStr = document.getElementById('buzzNum').value;
 
-        // 入力チェック呼出
-        if (!checkInput(fizzNum, buzzNum)) {
+        if (!shouldCheckInput(fizzStr, buzzStr)) {
+          // 入力文字チェック
           // 異常値の場合、処理中断
+          outputErrorResult();
+          event.stopPropagation();
+        } else if(!shouldCheckNumber(fizzStr) || !shouldCheckNumber(buzzStr)) {
+          // 整数チェック
+          outputErrorResult();
           event.stopPropagation();
         } else {
           // 出力結果表示関数呼出
-          resultMessage(zenkaku2Hankaku(fizzNum), zenkaku2Hankaku(buzzNum));
-        };
-      }
+          outputResult(zenkaku2Hankaku(fizzStr), zenkaku2Hankaku(buzzStr));
+        }
+      });
 
       /*
-      入力チェック機能
-      fizz,buzzのフォームに入力された値をチェックする
-      整数値以外の場合、エラー内容を表示する
-      [返却値] true: 正常値
-               false: 異常値
+      入力文字チェック
+      ・文字が入力されていることをチェックする
+      [返却値] true: 入力文字あり
+               false: 入力文字なし(空文字列)
       */
-      function checkInput(fizz, buzz) {
-
-        //空欄 (何も入力されない場合) 
-        //★ 入力フォームが初期値（空文字列）の場合、後続の整数チェックcheckNumber()にかからないため実装
-        if (!fizz || !buzz) {
-          errorMessage();
-          return false;
-        }
-
-        // 整数チェック
-        if (!checkNumber(fizz) || !checkNumber(buzz)) {
-          errorMessage();
-          return false;
-        }
-
-        return true;
+      function shouldCheckInput(fizz, buzz) {
+        //★ 入力フォームが初期値（空文字列）の場合、後続の整数チェックshouldCheckNumber()にかからないため実装
+        return fizz && buzz;
       }
 
       /*
@@ -66,7 +66,7 @@
       [返却値] true:  数値
                false: 数値以外
       */
-      function checkNumber(val) {
+      function shouldCheckNumber(val) {
         const pattern = /^([0-9０-９]*)$/;
         return pattern.test(val)
       }
@@ -74,15 +74,15 @@
       /*
       エラーメッセージ出力
       */
-      function errorMessage() {
+      function outputErrorResult() {
         // 結果出力divを生成
-        const newDiv = document.createElement("div");
-        newDiv.id = "result"
-        const errorMessage = document.createTextNode("整数値を入力してください");
-        newDiv.appendChild(errorMessage);
+        const newDiv = document.createElement('div');
+        newDiv.id = 'result'
+        const outputErrorResult = document.createTextNode('整数値を入力してください');
+        newDiv.appendChild(outputErrorResult);
 
         // 【出力】div下にエラーメッセージを出力
-        document.getElementById("output").appendChild(newDiv);
+        document.getElementById('output').appendChild(newDiv);
       }
 
       /*
@@ -96,61 +96,39 @@
 
       /*
       出力結果表示
-      ・fizzNumに入力された値の倍数とbuzzNumに入力された値の倍数を小さい順に表示する
+      ・fizzStrに入力された値の倍数とbuzzStrに入力された値の倍数を小さい順に表示する
       ・各々倍数と一緒にfizz、buzzと表示させる
       ・両方の倍数である時にはfizzBuzzと表示させる
       ・表示させるのは二桁の値まで
       */
-      function resultMessage(fizzNum, buzzNum) {
-
+      function outputResult(fizzStr, buzzStr) {
         // 出力結果を表示するdivを生成
-        const newDiv = document.createElement("div");
-        newDiv.id = "result";
+        const newDiv = document.createElement('div');
+        newDiv.id = 'result';
 
         // 出力結果の内容を保持するノード
         const ul = document.createElement('ul');
-        ul.style = "padding-inline-start: 0;";
+        ul.style = 'padding-inline-start: 0;';
         for (let i = 1; i < 100; i++) {
-          let li = document.createElement("li");
-          li.style = "list-style: none;";
-
-          if (i % fizzNum === 0 && i % buzzNum === 0) {
+          let li = document.createElement('li');
+          li.style = 'list-style: none;';
+          if (i % fizzStr === 0 && i % buzzStr === 0) {
             li.textContent = `FizzBuzz　${i}`;
             ul.appendChild(li);
-          } else if (i % fizzNum === 0) {
+          } else if (i % fizzStr === 0) {
             li.textContent = `Fizz　${i}`;
             ul.appendChild(li);
-          } else if (i % buzzNum === 0) {
+          } else if (i % buzzStr === 0) {
             li.textContent = `Buzz　${i}`;
             ul.appendChild(li);
           }
         }
-
         // 出力内容を子ノードとして追加
         newDiv.appendChild(ul);
         // 【出力】div下に出力
-        document.getElementById("output").appendChild(newDiv);
+        document.getElementById('output').appendChild(newDiv);
       }
-    }
-
   </script>
-</head>
-
-<body>
-  <p>Javascript課題②-1</p>
-
-  <div>
-    Fizz num : <input type="text" id="FizzNum" placeholder="整数値を入力してください">
-    <br>
-    Buzz num : <input type="text" id="BuzzNum" placeholder="整数値を入力してください">
-  </div>
-
-  <input type="button" id="exec_button" value="実行">
-
-  <div id="output">
-    【出力】
-  </div>
-
 </body>
 
 </html>
