@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html lang='ja'>
+<html lang="ja">
 
 <head>
-  <meta charset='UTF-8'>
-  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JavaScript課題②-1</title>
 </head>
 
 <body>
   <p>Javascript課題②-1</p>
   <div>
-    Fizz num : <input type='text' id='fizzNum' placeholder='整数値を入力してください'>
+    Fizz num : <input type="text" id="fizzNum" placeholder="整数値を入力してください">
     <br>
-    Buzz num : <input type='text' id='buzzNum' placeholder='整数値を入力してください'>
+    Buzz num : <input type="text" id="buzzNum" placeholder="整数値を入力してください">
   </div>
 
-  <input type='button' id='exec_button' value='実行'>
-  <div id='output'>
+  <input type="button" id="exec_button" value="実行">
+  <div id="output">
     【出力】
   </div>
 
@@ -34,31 +34,15 @@
         const fizzStr = document.getElementById('fizzNum').value;
         const buzzStr = document.getElementById('buzzNum').value;
 
-        if (!shouldCheckInput(fizzStr, buzzStr)) {
-          // 入力文字チェック
-          // 異常値の場合、処理中断
-          outputErrorResult();
-          event.stopPropagation();
-        } else if(!shouldCheckNumber(fizzStr) || !shouldCheckNumber(buzzStr)) {
+        if(!shouldCheckNumber(fizzStr) || !shouldCheckNumber(buzzStr)) {
           // 整数チェック
           outputErrorResult();
           event.stopPropagation();
-        } else {
+        }else {
           // 出力結果表示関数呼出
           outputResult(zenkaku2Hankaku(fizzStr), zenkaku2Hankaku(buzzStr));
         }
       });
-
-      /*
-      入力文字チェック
-      ・文字が入力されていることをチェックする
-      [返却値] true: 入力文字あり
-               false: 入力文字なし(空文字列)
-      */
-      function shouldCheckInput(fizz, buzz) {
-        //★ 入力フォームが初期値（空文字列）の場合、後続の整数チェックshouldCheckNumber()にかからないため実装
-        return fizz && buzz;
-      }
 
       /*
       整数チェック
@@ -67,7 +51,7 @@
                false: 数値以外
       */
       function shouldCheckNumber(val) {
-        const pattern = /^([0-9０-９]*)$/;
+        const pattern = /^([0-9０-９]+)$/;
         return pattern.test(val)
       }
 
@@ -109,16 +93,19 @@
         // 出力結果の内容を保持するノード
         const ul = document.createElement('ul');
         ul.style = 'padding-inline-start: 0;';
+        
+        const fizzNum = Number(fizzStr);
+        const buzzNum = Number(buzzStr);
         for (let i = 1; i < 100; i++) {
           let li = document.createElement('li');
           li.style = 'list-style: none;';
-          if (i % fizzStr === 0 && i % buzzStr === 0) {
+          if (i % fizzNum === 0 && i % buzzNum === 0) {
             li.textContent = `FizzBuzz　${i}`;
             ul.appendChild(li);
-          } else if (i % fizzStr === 0) {
+          } else if (i % fizzNum === 0) {
             li.textContent = `Fizz　${i}`;
             ul.appendChild(li);
-          } else if (i % buzzStr === 0) {
+          } else if (i % buzzNum === 0) {
             li.textContent = `Buzz　${i}`;
             ul.appendChild(li);
           }
