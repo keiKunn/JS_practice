@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript課題➂-1</title>
+</head>
+
+<body>
+  <p>Javascript課題➂-1</p>
+  <h1>ToDoリスト</h1>
+
+  <div id="radioAreaId">
+    <input type="radio" id="all_radioId" name="todo_RadioName" value="all_RadioValue" checked>
+    <label for="all_radioId">すべて</label>
+    <input type="radio" id="work_radioId" name="todo_RadioName" value="work_RadioValue">
+    <label for="work_radioId">作業中</label>
+    <input type="radio" id="done_radioId" name="todo_RadioName" value="done_RadioValue">
+    <label for="done_radioId">完了</label>
+  </div>
+
+  <table id="taskTableId">
+    <tr>
+      <th>ID</th>
+      <th>コメント</th>
+      <th>状態</th>
+    </tr>
+  </table>
+  <h2>新規タスクの追加</h2>
+  <div id="formAreaId">
+    <input type="text" id="addForm">
+    <input type="button" id="addBtn" value="追加">
+  </div>
+
+  <script>
+    'use strict';
+
+    document.getElementById('addBtn').addEventListener('click', function (event) {
+      const inputTask = document.getElementById('addForm').value;
+      if (inputTask.trim()) {
+        // 追加タスクが入力された場合
+        // 追加済タスクを取得
+        const taskTable = document.getElementById('taskTableId');
+        const cells = taskTable.getElementsByTagName('td');
+        if (cells.length !== 0) {
+          // 追加済タスクが存在する場合
+          let taskObj = [];
+          // 入力値をタスクオブジェクトに追加
+          const newTaskObj = {
+            id: taskTable.rows.length - 1,
+            comment: inputTask,
+            status: '<input type="button" id="workButtonId_' + (taskTable.rows.length) + '" value="作業中"> <input type="button" id="deleteButtonId_' + (taskTable.rows.length) + '" value="削除">'
+          }
+          taskObj.push(newTaskObj);
+
+          // 追加タスク表示
+          displayTask(taskTable, taskObj);
+        } else {
+          // 追加済タスクが存在しない場合、入力値でオブジェクトを生成する
+          // タスクオブジェクト格納用の配列を宣言
+          let taskObj = [];
+          // 入力値をタスクオブジェクトに追加
+          const newTaskObj = {
+            id: '0',
+            comment: inputTask,
+            status: '<input type="button" id="workButtonId_0" value="作業中"> <input type="button" id="deleteButtonId_0" value="削除">'
+          }
+          taskObj.push(newTaskObj);
+
+          // 追加タスク表示
+          displayTask(taskTable, taskObj);
+        }
+      }
+    });
+
+    /**
+   *追加タスク表示
+   * taskTable タスク一覧テーブル
+   * taskObj タスク格納オブジェクト
+   */
+    function displayTask(taskTable, taskObj) {
+      taskObj.map(function (obj) {
+        // 行追加
+        const newRow = taskTable.insertRow();
+        let newCell = newRow.insertCell();
+        // タスクid セット
+        const newTextId = document.createTextNode(obj.id);
+        newCell.appendChild(newTextId);
+        // コメント セット
+        const newTextComment = document.createTextNode(obj.comment);
+        newCell = newRow.insertCell();
+        newCell.appendChild(newTextComment);
+        // 状態 セット
+        const newStatus = obj.status;
+        newCell = newRow.insertCell();
+        newCell.innerHTML = newStatus;
+      });
+    }
+  </script>
+</body>
+
+</html>
