@@ -36,16 +36,15 @@
   <script>
     'use strict';
 
+    // タスク格納オブジェクト
+    let taskObj = [];
     document.getElementById('addBtn').addEventListener('click', function (event) {
       const inputTask = document.getElementById('addForm').value;
       if (inputTask.trim()) {
         // 追加タスクが入力された場合
         // 追加済タスクを取得
         const taskTable = document.getElementById('taskTableId');
-        const cells = taskTable.getElementsByTagName('td');
-        if (cells.length !== 0) {
-          // 追加済タスクが存在する場合
-          let taskObj = [];
+        if (taskObj.length !== 0) {
           // 入力値をタスクオブジェクトに追加
           const newTaskObj = {
             id: taskTable.rows.length - 1,
@@ -55,11 +54,10 @@
           taskObj.push(newTaskObj);
 
           // 追加タスク表示
-          displayTask(taskTable, taskObj);
+          const addTaskObj = [newTaskObj];
+          displayTask(taskTable, addTaskObj);
         } else {
           // 追加済タスクが存在しない場合、入力値でオブジェクトを生成する
-          // タスクオブジェクト格納用の配列を宣言
-          let taskObj = [];
           // 入力値をタスクオブジェクトに追加
           const newTaskObj = {
             id: '0',
