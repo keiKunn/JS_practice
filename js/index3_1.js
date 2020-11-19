@@ -36,10 +36,12 @@ function addTask() {
 function addTaskBtn(row) {
   // 作業中ボタン追加
   const workBtn = document.createElement('input')
+  workBtn.type = 'button';
   workBtn.id = `work_btnId_${row}`;
   workBtn.value = '作業中';
   // 削除ボタン追加
   const deleteBtn = document.createElement('input')
+  deleteBtn.type = 'button';
   deleteBtn.id = `delete_btnId_${row}`;
   deleteBtn.value = '削除';
 
