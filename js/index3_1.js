@@ -20,7 +20,9 @@ function addTask() {
   const newtask = {
     id: !tasks.length ? 0 : taskTable.rows.length - 1,
     comment: inputTask,
-    status: !tasks.length ? addTaskBtn(0) : addTaskBtn(taskTable.rows.length)
+    status: '作業中',
+    delete: '削除'
+    //status: !tasks.length ? addTaskBtn(0) : addTaskBtn(taskTable.rows.length)
   }
 
   // 追加タスク表示関数呼び出し
@@ -33,20 +35,20 @@ function addTask() {
 *タスク操作ボタン生成
 * row 行数
 */
-function addTaskBtn(row) {
-  // 作業中ボタン追加
-  const workBtn = document.createElement('input')
-  workBtn.type = 'button';
-  workBtn.id = `work_btnId_${row}`;
-  workBtn.value = '作業中';
-  // 削除ボタン追加
-  const deleteBtn = document.createElement('input')
-  deleteBtn.type = 'button';
-  deleteBtn.id = `delete_btnId_${row}`;
-  deleteBtn.value = '削除';
+// function addTaskBtn(row) {
+//   // 作業中ボタン追加
+//   const workBtn = document.createElement('input')
+//   workBtn.type = 'button';
+//   workBtn.id = `work_btnId_${row}`;
+//   workBtn.value = '作業中';
+//   // 削除ボタン追加
+//   const deleteBtn = document.createElement('input')
+//   deleteBtn.type = 'button';
+//   deleteBtn.id = `delete_btnId_${row}`;
+//   deleteBtn.value = '削除';
 
-  return workBtn + deleteBtn;
-}
+//   return workBtn + deleteBtn;
+// }
 
 /**
 *追加タスク表示
@@ -55,19 +57,21 @@ function addTaskBtn(row) {
 */
 function displayTask(taskTable, newtask) {
   // 行追加
-  const newRow = taskTable.insertRow();
-  let newCell = newRow.insertCell();
+  const newRow = taskTable.insertRow(-1);
   // タスクid セット
   const newTextId = document.createTextNode(newtask.id);
+  let newCell = newRow.insertCell(-1);
   newCell.appendChild(newTextId);
   // コメント セット
   const newTextComment = document.createTextNode(newtask.comment);
-  newCell = newRow.insertCell();
+  newCell = newRow.insertCell(-1);
   newCell.appendChild(newTextComment);
-  // 状態 セット
+  // 作業中ボタンセット
   const newStatus = newtask.status;
-  newCell = newRow.insertCell();
-  newCell.innerHTML = newStatus;    // [object HTMLInputElement][object HTMLInputElement]
-  //newCell.appendChild(newStatus); //  Uncaught TypeError: Failed to execute 'appendChild' on 'Node': parameter 1 is not of type 'Node'.
-
+  newCell = newRow.insertCell(-1);
+  newCell.innerHTML =`<input type='button' id='workBtn_${taskTable.rows.length-1}' value='${newStatus}'>`
+  // 削除ボタンセット
+  const newDelete = newtask.delete;
+  newCell = newRow.insertCell(-1);
+  newCell.innerHTML =`<input type='button' id='deleteBtn_${taskTable.rows.length-1}' value='${newDelete}'>`
 }
