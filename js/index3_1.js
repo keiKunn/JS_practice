@@ -11,7 +11,7 @@ function addTask() {
   const inputTask = document.getElementById('addForm').value;
   if (!inputTask.trim()) {
     // 追加タスクが入力されていない場合
-    return false;
+    return;
   }
 
   // タスクテーブル要素を取得
@@ -20,9 +20,7 @@ function addTask() {
   const newtask = {
     id: !tasks.length ? 0 : taskTable.rows.length - 1,
     comment: inputTask,
-    status: '作業中',
-    delete: '削除'
-    //status: !tasks.length ? addTaskBtn(0) : addTaskBtn(taskTable.rows.length)
+    status: '作業中'
   }
 
   // 追加タスク表示関数呼び出し
@@ -30,25 +28,6 @@ function addTask() {
   // 追加タスクをタスクオブジェクト格納配列に追加
   tasks.push(newtask);
 }
-
-/**
-*タスク操作ボタン生成
-* row 行数
-*/
-// function addTaskBtn(row) {
-//   // 作業中ボタン追加
-//   const workBtn = document.createElement('input')
-//   workBtn.type = 'button';
-//   workBtn.id = `work_btnId_${row}`;
-//   workBtn.value = '作業中';
-//   // 削除ボタン追加
-//   const deleteBtn = document.createElement('input')
-//   deleteBtn.type = 'button';
-//   deleteBtn.id = `delete_btnId_${row}`;
-//   deleteBtn.value = '削除';
-
-//   return workBtn + deleteBtn;
-// }
 
 /**
 *追加タスク表示
@@ -69,9 +48,16 @@ function displayTask(taskTable, newtask) {
   // 作業中ボタンセット
   const newStatus = newtask.status;
   newCell = newRow.insertCell(-1);
-  newCell.innerHTML =`<input type='button' id='workBtn_${taskTable.rows.length-1}' value='${newStatus}'>`
+  let workBtn = document.createElement('button')
+  workBtn.type = 'button';
+  workBtn.id = 'work_btnId';
+  workBtn.innerText = newtask.status;
+  newCell.appendChild(workBtn);
   // 削除ボタンセット
-  const newDelete = newtask.delete;
   newCell = newRow.insertCell(-1);
-  newCell.innerHTML =`<input type='button' id='deleteBtn_${taskTable.rows.length-1}' value='${newDelete}'>`
+  const deleteBtn = document.createElement('button')
+  deleteBtn.type = 'button';
+  deleteBtn.id = 'delete_btnId';
+  deleteBtn.innerText = '削除';
+  newCell.appendChild(deleteBtn);
 }
