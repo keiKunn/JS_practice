@@ -48,7 +48,7 @@ function displayTask(taskTable, newtask) {
   // 作業中ボタンセット
   const newStatus = newtask.status;
   newCell = newRow.insertCell(-1);
-  let workBtn = document.createElement('button')
+  const workBtn = document.createElement('button')
   workBtn.type = 'button';
   workBtn.id = 'work_btnId';
   workBtn.innerText = newtask.status;
