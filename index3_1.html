@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JavaScript課題➂-1</title>
+</head>
+
+<body>
+  <p>Javascript課題➂-1</p>
+  <h1>ToDoリスト</h1>
+
+  <div id="radio_area_id">
+    <input type="radio" id="all_radio_id" name="todo_radio_name" value="all_radio_value" checked>
+    <label for="all_radio_id">すべて</label>
+    <input type="radio" id="work_radio_id" name="todo_radio_name" value="work_radio_value">
+    <label for="work_radio_id">作業中</label>
+    <input type="radio" id="done_radio_id" name="todo_radio_name" value="done_radio_value">
+    <label for="done_radio_id">完了</label>
+  </div>
+
+  <table id="task_table_id">
+    <tr>
+      <th>ID</th>
+      <th>コメント</th>
+      <th>状態</th>
+    </tr>
+  </table>
+  <h2>新規タスクの追加</h2>
+  <div id="form_area_id">
+    <input type="text" id="addForm">
+    <input type="button" id="addBtn" value="追加">
+  </div>
+
+  <script type="text/javascript" src="js/index3_1.js"></script>
+</body>
+
+</html>
