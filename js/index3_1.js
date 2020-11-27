@@ -22,10 +22,10 @@ function addTask() {
     comment: inputTask,
     status: '作業中'
   }
-  // タスク表示
-  displayTask(newtask, newtask.id);
   // 追加タスクをタスクオブジェクト格納配列に追加
   tasks.push(newtask);
+  // タスク表示
+  displayTask(tasks);
 }
 
 /**
@@ -37,61 +37,55 @@ function deleteTask(index) {
   tasks.splice(index, 1);
   // tasksオブジェクトのid値を振り直し
   reAssignTaskId(tasks);
-  // 削除後タスク表示呼出
-  displayAfterDeleteTask(tasks);
-}
-
-/**
-*削除後タスク表示
-* tasks タスクオブジェクト格納配列
-*/
-function displayAfterDeleteTask(tasks) {
-  const tableRows = taskTable.getElementsByTagName('tr');
-  const rowCount = taskTable.rows.length - 1;
-
-  // 見出し行を除く既存行を削除
-  for (let i = rowCount; i > 0; i--) {
-    taskTable.deleteRow(i);
-  }
   // タスク表示
-  tasks.forEach((obj, index) => {
-    displayTask(obj, index);
-  });
+  displayTask(tasks);
 }
 
 /**
 *タスク表示
-* tasksObj タスクオブジェクト
-* index 行数
+* tasks 
 */
-function displayTask(tasksObj, index) {
-  // 行追加
-  const taskRow = taskTable.insertRow(-1);
-  // タスクid セット
-  const textId = document.createTextNode(tasksObj.id);
-  let cell = taskRow.insertCell(-1);
-  cell.appendChild(textId);
-  // コメント セット
-  const textComment = document.createTextNode(tasksObj.comment);
-  cell = taskRow.insertCell(-1);
-  cell.appendChild(textComment);
-  // 作業中ボタンセット
-  cell = taskRow.insertCell(-1);
-  const workBtn = document.createElement('button')
-  workBtn.type = 'button';
-  workBtn.id = 'workBtn';
-  workBtn.innerText = tasksObj.status;
-  cell.appendChild(workBtn);
-  // 削除ボタンセット
-  cell = taskRow.insertCell(-1);
-  const deleteBtn = document.createElement('button')
-  deleteBtn.type = 'button';
-  deleteBtn.id = 'deleteBtn';
-  deleteBtn.innerText = '削除';
-  deleteBtn.addEventListener('click', () => {
-    deleteTask(index);
+function displayTask(tasks) {
+  // 追加済みタスク行が表示されている場合、削除
+  const taskLength = taskTable.rows.length;
+  if (taskLength > 1 ) {
+    const rowCount = taskTable.rows.length - 1;
+    // 見出し行を除く既存行を削除
+    for (let i = rowCount; i > 0; i--) {
+      taskTable.deleteRow(i);
+    }
+  }
+
+  // タスク行生成
+  tasks.forEach((obj, index) => {
+    // 行追加
+    const taskRow = taskTable.insertRow(-1);
+    // タスクid セット
+    const textId = document.createTextNode(obj.id);
+    let cell = taskRow.insertCell(-1);
+    cell.appendChild(textId);
+    // コメント セット
+    const textComment = document.createTextNode(obj.comment);
+    cell = taskRow.insertCell(-1);
+    cell.appendChild(textComment);
+    // 作業中ボタンセット
+    cell = taskRow.insertCell(-1);
+    const workBtn = document.createElement('button')
+    workBtn.type = 'button';
+    workBtn.id = 'workBtn';
+    workBtn.innerText = obj.status;
+    cell.appendChild(workBtn);
+    // 削除ボタンセット
+    cell = taskRow.insertCell(-1);
+    const deleteBtn = document.createElement('button')
+    deleteBtn.type = 'button';
+    deleteBtn.id = 'deleteBtn';
+    deleteBtn.innerText = '削除';
+    deleteBtn.addEventListener('click', () => {
+      deleteTask(index);
+    });
+    cell.appendChild(deleteBtn);
   });
-  cell.appendChild(deleteBtn);
 }
 
 /**
