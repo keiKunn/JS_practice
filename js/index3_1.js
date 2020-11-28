@@ -29,6 +29,23 @@ function addTask() {
 }
 
 /**
+* タスク状態変更機能
+*  index 行数
+*/
+function changeStatus(index) {
+  const oldStatus = tasks[index].status;
+  // taskオブジェクトの状態を変更
+  if (oldStatus === '作業中') {
+    tasks[index].status = '完了';
+  } else {
+    tasks[index].status = '作業中';
+  }
+  // ボタン表示切替
+  const targetBtn = document.getElementById(`workBtn_${index}`);
+  targetBtn.innerText = tasks[index].status;
+}
+
+/**
 * タスク削除機能
 *  index 行数
 */
@@ -72,14 +89,17 @@ function displayTask(tasks) {
     cell = taskRow.insertCell(-1);
     const workBtn = document.createElement('button')
     workBtn.type = 'button';
-    workBtn.id = 'workBtn';
+    workBtn.id = `workBtn_${index}`;
     workBtn.innerText = obj.status;
+    workBtn.addEventListener('click', () => {
+      changeStatus(index);
+    });
     cell.appendChild(workBtn);
     // 削除ボタンセット
     cell = taskRow.insertCell(-1);
     const deleteBtn = document.createElement('button')
     deleteBtn.type = 'button';
-    deleteBtn.id = 'deleteBtn';
+    deleteBtn.id = `deleteBtn_${index}`;
     deleteBtn.innerText = '削除';
     deleteBtn.addEventListener('click', () => {
       deleteTask(index);
