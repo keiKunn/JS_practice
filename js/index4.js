@@ -1,16 +1,20 @@
 'use strict';
+let quizContents = [];
+let correctCnt;
 
 // quizクラス
 class Quiz {
-  constructor() {
+  constructor(title,explain,questionText,category,difficulty) {
     //初期状態
-    this.title = 'ようこそ';
-    this.explain = '以下のボタンをクリック'
-    this.quizContents = [];
-    this.correctCnt = 0;
+    this.title = title;           // 見出し
+    this.explain = explain;       // 説明文
+    this.questionText = questionText; // 問題文
+    this.category = category;     // ジャンル
+    this.difficulty = difficulty  // 難易度
   }
   // 初期表示
   displayInit() {
+    correctCnt = 0;
     // 画面エリア生成
     const quizArea = document.createElement('div');
     quizArea.id = 'quiz-area';
@@ -26,7 +30,7 @@ class Quiz {
     const explainParagraph = document.createElement('p');
     explainParagraph.id = 'explain-text';
     quizArea.appendChild(explainParagraph);
-    const explainText = document.createTextNode(this.explain);
+    const explainText = document.createTextNode(this.getExplain);
     explainParagraph.appendChild(explainText);
     quizArea.appendChild(document.createElement('hr'));
     // 開始ボタンセット
@@ -34,7 +38,8 @@ class Quiz {
     startBtn.id = 'startBtn';
     startBtn.innerText = '開始';
     startBtn.addEventListener('click', () => {
-      pushStartBtn(this) //★ thisは実行中のクラスインスタンスを指す
+      const quiz = new Quiz('処理中','少々お待ち下さい');
+      pushStartBtn(quiz);
     });
     quizArea.appendChild(startBtn);
     document.getElementsByTagName('body')[0].appendChild(quizArea);
@@ -43,28 +48,24 @@ class Quiz {
   // 処理中表示
   displayLoad() {
     // 見出し
-    this.title = '処理中';
     const oldTitle = document.getElementById('quiz-area').getElementsByTagName('h1');
-    oldTitle[0].innerText = this.title;
+    oldTitle[0].innerText = this.getTitle;
     // 説明文
-    this.explain = '少々お待ち下さい';
     const oldExplainText = document.getElementById('explain-text');
-    oldExplainText.innerText = this.explain;
+    oldExplainText.innerText = this.getExplain;
     // 開始ボタン非表示
     document.getElementById('startBtn').style.display = 'none';
   }
 
-  /*問題画面表示
+  /* 問題画面表示
   *  quizData クイズデータ
   *  quizNumber クイズ番号 
   */
   displayQuiz(quizData, quizNumber) {
-    const quizObjIdx = quizNumber - 1;
     const quizArea = document.getElementById('quiz-area');
     // 見出し
-    this.title = `問題${quizNumber}`;
     const oldTitle = document.getElementById('quiz-area').getElementsByTagName('h1');
-    oldTitle[0].innerText = this.title;
+    oldTitle[0].innerText = this.getTitle;
     // [ジャンル]・[難易度]
     const h2 = document.getElementsByTagName('h2')[0];
     let categoryArea;
@@ -79,17 +80,16 @@ class Quiz {
       categoryArea = document.getElementById('category-area');
       difficultyArea = document.getElementById('difficulty-area');
     }
-    categoryArea.innerText = `[ジャンル] ${replaceJsonEscape(quizData[quizObjIdx].category)}`;
+    categoryArea.innerText = `[ジャンル] ${replaceJsonEscape(this.getCategory)}`;
     h2.append(categoryArea);
-    difficultyArea.innerText = `[難易度] ${replaceJsonEscape(quizData[quizObjIdx].difficulty)}`;
+    difficultyArea.innerText = `[難易度] ${replaceJsonEscape(this.getDifficulty)}`;
     h2.append(difficultyArea);
     // 問題文
-    this.explain = replaceJsonEscape(quizData[quizObjIdx].question);
     const oldExplainText = document.getElementById('explain-text');
-    oldExplainText.innerText = this.explain;
+    oldExplainText.innerText = this.getQuestionText;
     // 選択肢
-    let choices = quizData[quizObjIdx].incorrect_answers; //不正解選択肢をセット
-    choices.push(quizData[quizObjIdx].correct_answer); //正解選択肢を追加
+    let choices = quizData.incorrect_answers; //不正解選択肢をセット
+    choices.push(quizData.correct_answer); //正解選択肢を追加
     // 選択肢データをシャッフル
     choices = shuffleChoices(choices);
 
@@ -109,18 +109,25 @@ class Quiz {
       choiceBtn.addEventListener('click', event => {
         //正解判定
         const choicedAnswer = event.currentTarget.innerText;
-        const correctAnswer = replaceJsonEscape(quizData[quizObjIdx].correct_answer);
+        const correctAnswer = replaceJsonEscape(quizData.correct_answer);
         if (choicedAnswer === correctAnswer) {
           // 正解数をカウント
-          this.correctCnt++;
+          correctCnt++;
         }
 
-        if (quizData.length !== quizNumber) {
-          // 次の問題を表示 
-          this.displayQuiz(quizData, quizNumber + 1);
+        if (quizContents.length !== quizNumber) {
+          // 次の問題を表示
+          const nextQuizNum = quizNumber + 1;
+          const nextQuizIdx = nextQuizNum - 1;
+          const questionText = replaceJsonEscape(quizContents[nextQuizIdx].question);
+          const category = quizContents[nextQuizIdx].category;
+          const difficulty = quizContents[nextQuizIdx].difficulty;
+          const quizClass = new Quiz(`問題${nextQuizNum}`, '', questionText, category, difficulty);
+          quizClass.displayQuiz(quizContents[nextQuizIdx], nextQuizNum);
         } else {
           // 結果を表示
-          this.displayResult();
+          const quizClass = new Quiz(`あなたの正当数は${correctCnt}です！`, '再度チャレンジしたい場合は以下のボタンをクリックして下さい。');
+          quizClass.displayResult();
         }
       });
       choiceParagraph.appendChild(choiceBtn);
@@ -139,13 +146,11 @@ class Quiz {
     const oldChoiceBtnArea = document.getElementById('choiceBtn-area');
     oldChoiceBtnArea.remove();
     // 見出し
-    this.title = `あなたの正当数は${this.correctCnt}です！`;
     const oldTitle = document.getElementById('quiz-area').getElementsByTagName('h1');
-    oldTitle[0].innerText = this.title;
+    oldTitle[0].innerText = this.getTitle;
     // 説明文
-    this.explain = '再度チャレンジしたい場合は以下のボタンをクリックして下さい。';
     const oldExplainText = document.getElementById('explain-text');
-    oldExplainText.innerText = this.explain;
+    oldExplainText.innerText = this.getExplain;
     // 「ホームに戻る」ボタン表示
     const homeBtn = document.createElement('button');
     homeBtn.id = 'homeBtn';
@@ -154,7 +159,7 @@ class Quiz {
       // 画面表示をリセット
       quizArea.remove();
       // クイズインスタンスを初期化
-      const quiz = new Quiz();
+      const quiz = new Quiz('ようこそ','以下のボタンをクリック');
       // 初期表示画面を呼び出す
       quiz.displayInit();
     });
@@ -168,11 +173,14 @@ class Quiz {
   get getExplain() {
     return this.explain;
   }
-  get getQuizContents() {
-    return this.quizContents;
+  get getQuestionText() {
+    return this.questionText;
   }
-  get getCorrectCnt() {
-    return this.correctCnt;
+  get getCategory() {
+    return this.category;
+  }
+  get getDifficulty() {
+    return this.difficulty;
   }
   // セッター
   set setTitle(title) {
@@ -181,13 +189,17 @@ class Quiz {
   set setExplain(explain) {
     this.explain = explain;
   }
-  set setQuizContents(quizContents) {
-    this.quizContents = quizContents;
+  set setQuestionText(questionText) {
+    this.questionText = questionText;
   }
-  set setCorrectCnt(correctCnt) {
-    this.correctCnt = correctCnt;
+  set setCategory(category) {
+    this.category = category;
+  }
+  set setDifficulty(difficulty) {
+    this.difficulty = difficulty;
   }
 }
+
 
 /**
 * 開始ボタン押下
@@ -212,8 +224,13 @@ const pushStartBtn = (quizClass) => {
       // 返却されたJsonから、quizクラスの中身を作成
       // クイズデータをインスタンスにセット
       console.log(result);
-      quizClass.quizContents = result.results; // Jsonデータの結果配列を取得
-      quizClass.displayQuiz(quizClass.quizContents, 1);
+      quizContents = result.results; // Jsonデータの結果配列を取得
+      // 問題文・カテゴリ・難易度をセット
+      const questionText = quizContents[0].question;
+      const category = quizContents[0].category;
+      const difficulty = quizContents[0].difficulty;
+      const quizClass = new Quiz('問題1', '', questionText, category, difficulty);
+      quizClass.displayQuiz(quizContents[0], 1);
 
     })
     .catch((error) => console.log(error));
@@ -236,10 +253,9 @@ const pushStartBtn = (quizClass) => {
 *   str json文字列
 */
 const replaceJsonEscape = (str) => {
-  return str.replace(/&quot;/g,'"').replace(/&#039;/, '\'');
+  return str.replace(/&quot;/g,'"').replace(/&#039;/g, '\'').replace(/&amp;/g, '&');
 }
 
 // 処理スタート
-const quiz = new Quiz();
+const quiz = new Quiz('ようこそ','以下のボタンをクリック');
 quiz.displayInit();
-
